@@ -1,164 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Campus - Student Portal</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mosammat Tabasum Mastaba Isma | AI &amp; Computer Vision Portfolio</title>
+<meta name="description" content="Portfolio of Mosammat Tabasum Mastaba Isma, Computer and Communication Engineering graduate working on deep learning and computer vision.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf6ef;--surface:#fff;--ink:#1d1a16;--muted:#6b645a;--line:#e6dfd2;--accent:#c2410c;--accent2:#0f766e;--glow:rgba(194,65,12,.12);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13110e;--surface:#1c1915;--ink:#f3eee6;--muted:#a39a8c;--line:#2e2a23;--accent:#fb923c;--accent2:#5eead4;--glow:rgba(251,146,60,.14);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#13110e;--surface:#1c1915;--ink:#f3eee6;--muted:#a39a8c;--line:#2e2a23;--accent:#fb923c;--accent2:#5eead4;--glow:rgba(251,146,60,.14);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden;transition:background .3s,color .3s}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
+h1,h2,h3{font-family:Fraunces,Georgia,"Times New Roman",serif;font-weight:600;line-height:1.1;margin:0}
+h1 em,h2 em{font-style:italic;font-weight:500;color:var(--accent)}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+#bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;height:3px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:70}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:20px;text-decoration:none}
+.logo span{color:var(--accent)}
+.links{display:flex;gap:6px;align-items:center}
+.links a{padding:8px 12px;border-radius:99px;text-decoration:none;font-size:14px;color:var(--muted);transition:.2s}
+.links a:hover,.links a.on{color:var(--ink);background:var(--glow)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:99px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);text-decoration:none;font-weight:500;font-size:15px;cursor:pointer;font-family:inherit;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--glow)}
+.btn.ghost{background:transparent;color:var(--ink)}
+#theme,#menu{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font-size:16px}
+#menu{display:none}
+.hero{min-height:calc(100vh - 64px);display:grid;align-items:center;position:relative;padding:48px 0}
+.hero .blob{position:absolute;right:-8%;top:8%;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 70%);filter:blur(10px);pointer-events:none}
+.pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:var(--surface);padding:6px 14px;border-radius:99px;font-size:13px;color:var(--muted)}
+.pill i{width:8px;height:8px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 0 #16a34a;animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.hero h1{font-size:clamp(40px,8vw,92px);margin:22px 0 16px;letter-spacing:-.02em}
+.type{font-size:clamp(18px,2.6vw,26px);color:var(--muted);min-height:1.6em}
+.type b{color:var(--accent2);font-weight:500}
+.caret{display:inline-block;width:2px;height:1em;background:var(--accent);margin-left:3px;vertical-align:-.12em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero p.lead{max-width:600px;margin:18px 0 28px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.mono{position:absolute;right:4%;bottom:12%;width:180px;height:180px;border-radius:32% 68% 60% 40%/45% 40% 60% 55%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font:600 64px Fraunces,Georgia,serif;color:#fff;animation:morph 9s ease-in-out infinite alternate;box-shadow:0 20px 50px var(--glow)}
+@keyframes morph{50%{border-radius:60% 40% 30% 70%/55% 60% 40% 45%}100%{border-radius:40% 60% 70% 30%/40% 50% 60% 50%;transform:rotate(8deg)}}
+.marq{border-block:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:14px 0;background:var(--surface)}
+.marq div{display:inline-block;animation:slide 32s linear infinite;font-family:Fraunces,Georgia,serif;font-size:20px;color:var(--muted)}
+.marq span{margin:0 22px}.marq span::after{content:"✦";margin-left:44px;color:var(--accent)}
+@keyframes slide{to{transform:translateX(-50%)}}
+section{padding:92px 0}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:12px}
+h2{font-size:clamp(30px,5vw,52px);margin-bottom:34px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:30px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;transition:transform .25s,box-shadow .25s,border-color .25s}
+.card:hover{border-color:var(--accent);box-shadow:0 14px 34px var(--glow)}
+.num{font:600 40px Fraunces,Georgia,serif;color:var(--accent)}
+.stat small{display:block;color:var(--muted);font-size:13px;line-height:1.4}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:start}
+.pub{border-left:4px solid var(--accent);}
+.pub h3{font-size:22px;margin:6px 0 10px}
+.tag{display:inline-block;font-size:12px;padding:4px 11px;border-radius:99px;background:var(--glow);color:var(--accent);font-weight:500;margin:0 6px 6px 0}
+.tl{position:relative;padding-left:26px;border-left:2px solid var(--line);display:grid;gap:22px}
+.tl>div{position:relative}
+.tl>div::before{content:"";position:absolute;left:-33px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--bg)}
+.tl h3{font-size:19px}.tl .when{font-size:13px;color:var(--accent2);font-weight:600}
+.tl p{margin:6px 0 0;color:var(--muted);font-size:15px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.filters button{padding:8px 16px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;font:inherit;font-size:14px;transition:.2s}
+.filters button.on,.filters button:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.proj{display:flex;flex-direction:column;gap:10px;transform-style:preserve-3d;will-change:transform}
+.proj.hide{display:none}
+.proj h3{font-size:20px}.proj p{margin:0;color:var(--muted);font-size:15px;flex:1}
+.proj a{color:var(--accent);text-decoration:none;font-weight:500;font-size:14px}
+.proj a:hover{text-decoration:underline}
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.skills h3{font-size:18px;margin-bottom:12px}
+.chip{display:inline-block;padding:6px 12px;margin:0 6px 8px 0;border:1px solid var(--line);border-radius:99px;font-size:14px;transition:.2s;background:var(--bg)}
+.chip:hover{border-color:var(--accent2);color:var(--accent2);transform:translateY(-2px)}
+.cert{display:grid;gap:10px}
+.cert div{display:flex;gap:12px;align-items:flex-start}.cert b{color:var(--accent)}
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:34px}
+.contact a.m{display:block;font:600 clamp(18px,3vw,26px) Fraunces,Georgia,serif;color:var(--accent);text-decoration:none;overflow-wrap:anywhere;margin:6px 0}
+form{display:grid;gap:12px}
+input,textarea{width:100%;padding:13px 15px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit}
+input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
+.rv.in{opacity:1;transform:none}
+@media (max-width:820px){
+.links{position:absolute;top:64px;left:0;right:0;flex-direction:column;align-items:stretch;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 22px 18px;display:none}
+.links.open{display:flex}#menu{display:block}
+.grid2,.contact{grid-template-columns:1fr}
+.mono{position:relative;right:auto;bottom:auto;margin-top:34px;width:130px;height:130px;font-size:46px}
+section{padding:64px 0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-    <!-- Auth Screen -->
-    <div id="auth-screen" class="screen active">
-        <div class="auth-container">
-            <div class="auth-card">
-                <h1 class="app-title">Voice Campus</h1>
-                <p class="app-subtitle">Student Portal</p>
-                
-                <div id="login-form" class="auth-form active">
-                    <h2>Login</h2>
-                    <div class="form-group">
-                        <label for="login-email">Email</label>
-                        <input type="email" id="login-email" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login-password">Password</label>
-                        <input type="password" id="login-password" placeholder="Enter your password" required>
-                    </div>
-                    <button class="btn btn-primary" onclick="handleLogin()">Login</button>
-                    <p class="auth-switch">Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
-                </div>
+<div id="bar"></div>
+<header><div class="wrap"><nav>
+<a class="logo" href="#home">Isma<span>.</span></a>
+<div class="links" id="links">
+<a href="#about">About</a><a href="#research">Research</a><a href="#experience">Experience</a><a href="#work">Projects</a><a href="#skills">Skills</a><a href="#contact">Contact</a>
+<a href="https://github.com/isma20" target="_blank" rel="noopener">GitHub ↗</a>
+</div>
+<div style="display:flex;gap:8px"><button id="theme" aria-label="Toggle theme">◐</button><button id="menu" aria-label="Menu">☰</button></div>
+</nav></div></header>
 
-                <div id="register-form" class="auth-form">
-                    <h2>Register</h2>
-                    <div class="form-group">
-                        <label for="register-name">Full Name</label>
-                        <input type="text" id="register-name" placeholder="Enter your full name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-email">Email</label>
-                        <input type="email" id="register-email" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-password">Password</label>
-                        <input type="password" id="register-password" placeholder="Create a password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-student-id">Student ID</label>
-                        <input type="text" id="register-student-id" placeholder="Enter your student ID" required>
-                    </div>
-                    <button class="btn btn-primary" onclick="handleRegister()">Register</button>
-                    <p class="auth-switch">Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
-                </div>
+<main id="home">
+<div class="hero"><div class="blob"></div><div class="wrap" style="position:relative">
+<span class="pill"><i></i>Open to AI, ML &amp; computer vision roles</span>
+<h1>Mosammat Tabasum<br><em>Mastaba Isma.</em></h1>
+<div class="type"><span id="tw"></span><span class="caret"></span></div>
+<p class="lead">Computer and Communication Engineering graduate from IIUC. I build deep learning pipelines for image segmentation, from dataset cleaning to GPU training and evaluation.</p>
+<div class="cta"><a class="btn" href="#work">View projects</a><a class="btn ghost" href="#contact">Let’s talk ↗</a></div>
+<div class="mono" aria-hidden="true">MI</div>
+</div></div>
+<div class="marq" aria-hidden="true"><div><span>Deep Learning</span><span>Computer Vision</span><span>PyTorch</span><span>Swin Transformer</span><span>Image Segmentation</span><span>Python</span><span>Deep Learning</span><span>Computer Vision</span><span>PyTorch</span><span>Swin Transformer</span><span>Image Segmentation</span><span>Python</span></div></div>
 
-                <div id="auth-message" class="message"></div>
-            </div>
-        </div>
-    </div>
+<section id="about"><div class="wrap">
+<div class="eyebrow rv">01 / Profile</div>
+<h2 class="rv">Research-minded. <em>Hands-on</em> builder.</h2>
+<p class="rv" style="max-width:720px;margin:0">I recently completed my BSc in Computer and Communication Engineering at IIUC with a 3.758 CGPA. My thesis, built with Sumaiya Binte Masum, produced a crack segmentation network that is accepted for oral presentation at IEEE ICISET 2026. I also taught Data Structures &amp; Algorithms and Java as a Teaching Assistant, and I enjoy explaining technical ideas clearly.</p>
+<div class="stats">
+<div class="card stat rv"><div class="num" data-to="3.758" data-d="3">0</div><small>CGPA (thesis GPA 4.00)</small></div>
+<div class="card stat rv"><div class="num" data-to="90.46" data-d="2" data-s="%">0</div><small>mIoU, mean of 3 seeds</small></div>
+<div class="card stat rv"><div class="num" data-to="40" data-s="+">0</div><small>students mentored as TA</small></div>
+<div class="card stat rv"><div class="num" data-to="200" data-s="+">0</div><small>event participants coordinated</small></div>
+</div></div></section>
 
-    <!-- Main App Screen -->
-    <div id="app-screen" class="screen">
-        <header class="app-header">
-            <div class="header-content">
-                <h1>Voice Campus</h1>
-                <div class="user-info">
-                    <span id="user-name"></span>
-                    <button class="btn btn-secondary" onclick="handleLogout()">Logout</button>
-                </div>
-            </div>
-        </header>
+<section id="research" style="background:var(--surface);border-block:1px solid var(--line)"><div class="wrap">
+<div class="eyebrow rv">02 / Research</div>
+<h2 class="rv">Seeing cracks, <em>measuring</em> them.</h2>
+<div class="grid2">
+<div class="card pub rv">
+<span class="tag">First author</span><span class="tag">IEEE ICISET 2026 · Oral</span>
+<h3>BAGFD-Net: Multimodal Boundary-Aware Fusion for Crack Segmentation and Geometric Quantification</h3>
+<p style="color:var(--muted);margin:0 0 14px">A Swin-Tiny encoder with a boundary-aware gated fusion decoder and CBAM. It takes an 8-channel input (RGB, laser intensity, range colormap, modality flag) and measures crack length, area and width from the predicted mask.</p>
+<a class="btn" href="https://github.com/isma20/BAGFD-Net-Crack-Segmentation" target="_blank" rel="noopener">View repository ↗</a>
+</div>
+<div class="card rv">
+<h3 style="font-size:20px;margin-bottom:14px">Results at a glance</h3>
+<div class="cert">
+<div><b>90.46%</b><span>mIoU on held-out test (±0.24, 3 seeds), ahead of U-Net, DeepLabV3+ and Attention U-Net by 2.9–5.1 points</span></div>
+<div><b>0.979</b><span>Pearson r for crack area against ground truth</span></div>
+<div><b>0.956</b><span>Pearson r for mean crack width</span></div>
+<div><b>3037</b><span>images, merged DeepCrack and FIND</span></div>
+</div></div></div></div></section>
 
-        <nav class="app-nav">
-            <button class="nav-btn active" onclick="showSection('notices')">Notices</button>
-            <button class="nav-btn" onclick="showSection('attendance')">Attendance</button>
-            <button class="nav-btn" onclick="showSection('report')">Report Problem</button>
-        </nav>
+<section id="experience"><div class="wrap">
+<div class="eyebrow rv">03 / Experience &amp; education</div>
+<h2 class="rv">Learning, teaching, <em>leading.</em></h2>
+<div class="grid2">
+<div class="tl rv">
+<div><span class="when">2026</span><h3>Undergraduate Thesis · IIUC</h3><p>End-to-end PyTorch pipeline for road crack segmentation: dataset cleaning, Swin-Tiny with attention-gated decoder, GPU training on Kaggle and Colab, evaluation.</p></div>
+<div><span class="when">2025 – 2026</span><h3>Teaching Assistant, Data Structures &amp; Algorithms · IIUC</h3><p>Mentored 40+ students on algorithmic logic and C++ efficiency. Reviewed and debugged lab code for clean code and OOP.</p></div>
+<div><span class="when">2024</span><h3>Teaching Assistant, Java · IIUC</h3><p>Guided students and evaluated the logical efficiency of their code.</p></div>
+<div><span class="when">2022 – 2023</span><h3>Chief Executive (GS) · CCE Club Female Chapter</h3><p>Worked with faculty and industry professionals to run technical events for 200+ participants.</p></div>
+</div>
+<div style="display:grid;gap:14px">
+<div class="card rv"><span class="when" style="font-size:13px;color:var(--accent2);font-weight:600">2022 – 2026</span><h3 style="font-size:19px;margin:4px 0">BSc, Computer and Communication Engineering</h3><p style="margin:0;color:var(--muted);font-size:15px">International Islamic University Chittagong. CGPA 3.758, 8th semester GPA 3.956, thesis GPA 4.00.</p></div>
+<div class="card rv"><span class="when" style="font-size:13px;color:var(--accent2);font-weight:600">2015 – 2020</span><h3 style="font-size:19px;margin:4px 0">GCE A Levels &amp; O Levels · Science</h3><p style="margin:0;color:var(--muted);font-size:15px">Presidency International School (British Council, Cambridge).</p></div>
+<div class="card rv"><h3 style="font-size:19px;margin-bottom:10px">Recognition</h3>
+<div class="cert"><div><b>★</b><span>3rd Position, IIUC TECHFEST 2025, Mobile Games and Apps Development</span></div><div><b>★</b><span>Best Rookie Team, Inter Semester Programming Contest 2022</span></div><div><b>★</b><span>Daily Star Awardee, O Levels</span></div></div></div>
+</div></div></div></section>
 
-        <main class="app-main">
-            <!-- Notices Section -->
-            <section id="notices-section" class="content-section active">
-                <div class="section-header">
-                    <h2>Notices</h2>
-                    <button class="btn btn-primary" onclick="refreshNotices()">Refresh</button>
-                </div>
-                <div id="notices-list" class="notices-list">
-                    <div class="loading">Loading notices...</div>
-                </div>
-            </section>
+<section id="work" style="background:var(--surface);border-block:1px solid var(--line)"><div class="wrap">
+<div class="eyebrow rv">04 / Selected work</div>
+<h2 class="rv">Ideas, made <em>tangible.</em></h2>
+<div class="filters rv" id="filters"><button class="on" data-f="all">All</button><button data-f="ai">AI &amp; Vision</button><button data-f="web">Web</button><button data-f="mobile">Mobile</button><button data-f="iot">IoT</button><button data-f="py">Python</button></div>
+<div class="projects">
+<div class="card proj rv" data-c="ai"><span class="tag">AI &amp; Vision</span><h3>BAGFD-Net Crack Segmentation</h3><p>Multimodal crack segmentation with geometric quantification. 90.46% mIoU. Thesis project with Sumaiya Binte Masum.</p><a href="https://github.com/isma20/BAGFD-Net-Crack-Segmentation" target="_blank" rel="noopener">GitHub ↗</a></div>
+<div class="card proj rv" data-c="iot"><span class="tag">IoT</span><h3>Laser Guard</h3><p>Arduino-based IoT security system using laser detection.</p><a href="https://github.com/isma20/Laser-Guard-IoT" target="_blank" rel="noopener">GitHub ↗</a></div>
+<div class="card proj rv" data-c="web"><span class="tag">Web · PHP</span><h3>MIR Online Shopping</h3><p>Full-stack PHP e-commerce website with interactive user interfaces and shopping logic. Code and setup steps on GitHub.</p><a href="https://github.com/isma20/MIR-Online-Shopping" target="_blank" rel="noopener">GitHub ↗</a></div>
+<div class="card proj rv" data-c="py"><span class="tag">Python</span><h3>Scientific Calculator</h3><p>Scientific calculator built in Python.</p><a href="https://github.com/isma20/Scientific-Calculator" target="_blank" rel="noopener">GitHub ↗</a></div>
+<div class="card proj rv" data-c="mobile"><span class="tag">Mobile</span><h3>Campus Voice App</h3><p>Kotlin Android app for IIUC with role-based student and admin login, attendance summary, notice board and problem reporting. Team project.</p><a href="https://github.com/isma20/Campus-Voice-App" target="_blank" rel="noopener">GitHub ↗</a></div>
+<div class="card proj rv" data-c="web"><span class="tag">Web · Blockchain</span><h3>Blockchain-Integrated Tutor App</h3><p>Platform that uses blockchain to make tutor-student interactions secure and transparent.</p></div>
+</div></div></section>
 
-            <!-- Attendance Section -->
-            <section id="attendance-section" class="content-section">
-                <div class="section-header">
-                    <h2>My Attendance</h2>
-                    <button class="btn btn-primary" onclick="refreshAttendance()">Refresh</button>
-                </div>
-                <div id="attendance-stats" class="attendance-stats">
-                    <div class="stat-card">
-                        <h3>Total Classes</h3>
-                        <p id="total-classes">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Present</h3>
-                        <p id="present-count">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Absent</h3>
-                        <p id="absent-count">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Attendance %</h3>
-                        <p id="attendance-percentage">0%</p>
-                    </div>
-                </div>
-                <div id="attendance-list" class="attendance-list">
-                    <div class="loading">Loading attendance...</div>
-                </div>
-            </section>
+<section id="skills"><div class="wrap">
+<div class="eyebrow rv">05 / Toolkit</div>
+<h2 class="rv">Built on solid <em>foundations.</em></h2>
+<div class="skills">
+<div class="card rv"><h3>AI &amp; Data Science</h3><span class="chip">Machine Learning</span><span class="chip">Deep Learning</span><span class="chip">PyTorch</span><span class="chip">Swin Transformer</span><span class="chip">CNNs</span><span class="chip">Computer Vision</span><span class="chip">Image Segmentation</span><span class="chip">Attention Mechanisms</span><span class="chip">Model Evaluation</span><span class="chip">NLP Fundamentals</span></div>
+<div class="card rv"><h3>Languages</h3><span class="chip">Python</span><span class="chip">C / C++</span><span class="chip">Java</span><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span><span class="chip">PHP</span></div>
+<div class="card rv"><h3>Platforms &amp; Core</h3><span class="chip">Kaggle GPUs</span><span class="chip">Google Colab</span><span class="chip">Arduino</span><span class="chip">OOP</span><span class="chip">Data Structures &amp; Algorithms</span></div>
+</div></div></section>
 
-            <!-- Report Problem Section -->
-            <section id="report-section" class="content-section">
-                <div class="section-header">
-                    <h2>Report a Problem</h2>
-                </div>
-                <div class="report-form-container">
-                    <form id="report-form" class="report-form">
-                        <div class="form-group">
-                            <label for="problem-title">Problem Title</label>
-                            <input type="text" id="problem-title" placeholder="Brief description of the problem" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="problem-category">Category</label>
-                            <select id="problem-category" required>
-                                <option value="">Select a category</option>
-                                <option value="academic">Academic</option>
-                                <option value="infrastructure">Infrastructure</option>
-                                <option value="administrative">Administrative</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="problem-description">Description</label>
-                            <textarea id="problem-description" rows="5" placeholder="Describe your problem in detail..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit Report</button>
-                    </form>
-                </div>
-                <div id="report-message" class="message"></div>
-                <div class="section-header" style="margin-top: 2rem;">
-                    <h2>My Reports</h2>
-                </div>
-                <div id="reports-list" class="reports-list">
-                    <div class="loading">Loading your reports...</div>
-                </div>
-            </section>
-        </main>
-    </div>
+<section id="contact" style="background:var(--surface);border-top:1px solid var(--line)"><div class="wrap">
+<div class="eyebrow rv">06 / Contact</div>
+<h2 class="rv">Let’s build something <em>useful together.</em></h2>
+<div class="contact">
+<div class="rv"><p style="margin-top:0;color:var(--muted)">Interested in AI, machine learning or computer vision work? I would love to connect.</p>
+<a class="m" href="mailto:ismatabasum16@gmail.com">ismatabasum16@gmail.com</a>
+<a class="m" href="tel:+8801836903477" style="font-size:20px;color:var(--ink)">+880 1836903477</a>
+<p style="color:var(--muted)">Chittagong, Bangladesh</p>
+<div class="cta"><a class="btn ghost" href="https://www.linkedin.com/in/mosammat-tabasum-mastaba-isma-6a949a382" target="_blank" rel="noopener">LinkedIn ↗</a><a class="btn ghost" href="https://github.com/isma20" target="_blank" rel="noopener">GitHub ↗</a></div></div>
+<form class="rv" id="cf"><input id="n" placeholder="Your name" required><input id="e" type="email" placeholder="Your email" required><textarea id="m" rows="5" placeholder="Message" required></textarea><button class="btn" type="submit">Send message ↗</button><small style="color:var(--muted)">Opens your email app with the message ready to send.</small></form>
+</div></div></section>
+</main>
+<footer><div class="wrap"><span>© 2026 Mosammat Tabasum Mastaba Isma</span><a href="#home">Back to top ↑</a></div></footer>
 
-    <script src="firebase-config.js"></script>
-    <script src="app.js"></script>
+<script>
+(function(){
+var d=document,root=d.documentElement;
+try{var t=localStorage.getItem('theme');if(t)root.setAttribute('data-theme',t)}catch(e){}
+d.getElementById('theme').onclick=function(){var dark=root.getAttribute('data-theme')?root.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme:dark)').matches;var n=dark?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}};
+var L=d.getElementById('links');d.getElementById('menu').onclick=function(){L.classList.toggle('open')};
+L.addEventListener('click',function(e){if(e.target.tagName==='A')L.classList.remove('open')});
+/* typing */
+var roles=['Deep learning researcher','Computer vision builder','Image segmentation engineer','Teaching assistant & mentor'],ri=0,ci=0,del=false,tw=d.getElementById('tw');
+(function tick(){var w=roles[ri];tw.innerHTML='<b>'+w.slice(0,ci)+'</b>';if(!del&&ci<w.length){ci++;setTimeout(tick,70)}else if(!del){del=true;setTimeout(tick,1400)}else if(ci>0){ci--;setTimeout(tick,35)}else{del=false;ri=(ri+1)%roles.length;setTimeout(tick,300)}})();
+/* reveal + counters */
+var io=new IntersectionObserver(function(es){es.forEach(function(x){if(!x.isIntersecting)return;x.target.classList.add('in');var n=x.target.querySelector&&x.target.querySelector('.num');if(n&&!n.dataset.done)count(n);io.unobserve(x.target)})},{threshold:.15});
+d.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+function count(n){n.dataset.done=1;var to=+n.dataset.to,dp=+(n.dataset.d||0),s=n.dataset.s||'',t0=performance.now();(function f(t){var p=Math.min(1,(t-t0)/1400),e=1-Math.pow(1-p,3);n.textContent=(to*e).toFixed(dp)+s;if(p<1)requestAnimationFrame(f)})(t0)}
+/* progress + active link */
+var bar=d.getElementById('bar'),secs=[].slice.call(d.querySelectorAll('section[id]')),as=[].slice.call(L.querySelectorAll('a'));
+addEventListener('scroll',function(){var h=root.scrollHeight-innerHeight;bar.style.width=(h>0?scrollY/h*100:0)+'%';var cur='';secs.forEach(function(s){if(s.getBoundingClientRect().top<140)cur=s.id});as.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+cur)})},{passive:true});
+/* filters */
+var ps=[].slice.call(d.querySelectorAll('.proj'));
+d.getElementById('filters').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});ps.forEach(function(p){p.classList.toggle('hide',b.dataset.f!=='all'&&p.dataset.c!==b.dataset.f)})});
+/* tilt */
+if(matchMedia('(hover:hover)').matches)ps.forEach(function(p){p.addEventListener('mousemove',function(e){var r=p.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;p.style.transform='perspective(700px) rotateY('+x*8+'deg) rotateX('+-y*8+'deg) translateY(-4px)'});p.addEventListener('mouseleave',function(){p.style.transform=''})});
+/* contact */
+d.getElementById('cf').addEventListener('submit',function(e){e.preventDefault();var n=d.getElementById('n').value,em=d.getElementById('e').value,m=d.getElementById('m').value;location.href='mailto:ismatabasum16@gmail.com?subject='+encodeURIComponent('Portfolio message from '+n)+'&body='+encodeURIComponent(m+'\n\n— '+n+' ('+em+')')});
+})();
+</script>
 </body>
 </html>
-
