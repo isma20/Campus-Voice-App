@@ -25,10 +25,10 @@ Team project, Department of CCE, IIUC: Mosammat Tabasum, Umme Joynob, Lamyea Ras
 - Manage students and data
 
 ## Screenshots
-![Attendance, notices and report screens](screenshots/1_attendance_notices_report.png)
-![Student portal](screenshots/2_student_portal_screens.png)
-![Student login](screenshots/3_student_login.png)
-![Admin login](screenshots/4_admin_login.png)
+![Attendance, notices and report screens](1_attendance_notices_report.png)
+![Student portal](2_student_portal_screens.png)
+![Student login](3_student_login.png)
+![Admin login](4_admin_login.png)
 
 ## Tech
 Kotlin (Android), Firebase / API backend, HTML + CSS, role-based authentication
