@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Voice Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="splash-screen active">
+        <div class="splash-content">
+            <div class="splash-logo">🎓</div>
+            <h1 class="splash-title">Campus Voice</h1>
+            <p class="splash-subtitle">IIUC Student Portal</p>
+        </div>
+    </div>
+
+    <!-- Auth Screen -->
+    <div id="auth-screen" class="screen">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="logo-container">
+                    <div class="app-logo">🎓</div>
+                </div>
+                <h1 class="app-title">Campus Voice</h1>
+                <p id="app-subtitle" class="app-subtitle">IIUC Student Portal</p>
+
+                <div class="role-tabs">
+                    <button id="role-tab-student" class="role-tab active" onclick="setAuthRole('student')">Student</button>
+                    <button id="role-tab-admin" class="role-tab" onclick="setAuthRole('admin')">Admin</button>
+                    <button id="role-tab-teacher" class="role-tab" onclick="setAuthRole('teacher')">Teacher</button>
+                </div>
+                
+                <div id="student-auth" class="role-auth active">
+                    <div id="student-login-form" class="auth-form active">
+                        <h2>Student Login</h2>
+                        <div class="form-group">
+                            <label for="student-login-email">IIUC Student Email</label>
+                            <input type="email" id="student-login-email" placeholder="ex : e221222@ugrad.iiuc.ac.bd" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-login-password">Password</label>
+                            <input type="password" id="student-login-password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember-student" checked>
+                            <label for="remember-student">Remember my email</label>
+                        </div>
+                        <button class="btn btn-primary" onclick="handleLogin('student')">Login</button>
+                        <p class="auth-switch">Don't have an account? <a href="#" onclick="switchAuthForm('student','register')">Register</a></p>
+                    </div>
+
+                    <div id="student-register-form" class="auth-form">
+                        <h2>Student Registration</h2>
+                        <div class="form-group">
+                            <label for="student-register-name">Full Name</label>
+                            <input type="text" id="student-register-name" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-register-email">IIUC Student Email</label>
+                            <input type="email" id="student-register-email" placeholder="ex : e221222@ugrad.iiuc.ac.bd" required>
+                            <small style="color: var(--text-light); font-size: 0.85rem; display: block; margin-top: 0.25rem;">Format: e[digits]@ugrad.iiuc.ac.bd (ex : e221222@ugrad.iiuc.ac.bd)</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-register-password">Password</label>
+                            <input type="password" id="student-register-password" placeholder="Create a password (min. 6 characters)" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-register-student-id">Student ID</label>
+                            <input type="text" id="student-register-student-id" placeholder="ex : e221222" required>
+                            <small style="color: var(--text-light); font-size: 0.85rem; display: block; margin-top: 0.25rem;">Format: e followed by digits. Must match your email prefix (ex : e221222).</small>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember-student-register" checked>
+                            <label for="remember-student-register">Save my email and ID</label>
+                        </div>
+                        <button class="btn btn-primary" onclick="handleRegister('student')">Register</button>
+                        <p class="auth-switch">Already have an account? <a href="#" onclick="switchAuthForm('student','login')">Login</a></p>
+                    </div>
+                </div>
+
+                <div id="admin-auth" class="role-auth">
+                    <div id="admin-login-form" class="auth-form active">
+                        <h2>Admin Login</h2>
+                        <div class="form-group">
+                            <label for="admin-login-email">Admin Email</label>
+                            <input type="email" id="admin-login-email" placeholder="ex : admin@iiuc.bd" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-login-password">Password</label>
+                            <input type="password" id="admin-login-password" placeholder="Enter password" required>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember-admin" checked>
+                            <label for="remember-admin">Remember my email</label>
+                        </div>
+                        <button class="btn btn-primary" onclick="handleLogin('admin')">Login</button>
+                        <p class="auth-switch">New admin? <a href="#" onclick="switchAuthForm('admin','register')">Register</a></p>
+                    </div>
+
+                    <div id="admin-register-form" class="auth-form">
+                        <h2>Admin Registration</h2>
+                        <div class="form-group">
+                            <label for="admin-register-name">Full Name</label>
+                            <input type="text" id="admin-register-name" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-register-email">Admin Email</label>
+                            <input type="email" id="admin-register-email" placeholder="ex : admin@iiuc.bd" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-register-password">Password</label>
+                            <input type="password" id="admin-register-password" placeholder="Create a password (min. 6 characters)" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-access-code">Access Code</label>
+                            <input type="password" id="admin-access-code" placeholder="Enter admin access code" required>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember-admin-register" checked>
+                            <label for="remember-admin-register">Save my email</label>
+                        </div>
+                        <button class="btn btn-primary" onclick="handleRegister('admin')">Register</button>
+                        <p class="auth-switch">Already have an account? <a href="#" onclick="switchAuthForm('admin','login')">Login</a></p>
+                    </div>
+                </div>
+
+                <div id="teacher-auth" class="role-auth">
+                    <div id="teacher-login-form" class="auth-form active">
+                        <h2>Teacher Login</h2>
+                        <div class="form-group">
+                            <label for="teacher-login-email">Teacher Email</label>
+                            <input type="email" id="teacher-login-email" placeholder="ex : teacher@iiuc.bd" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher-login-password">Password</label>
+                            <input type="password" id="teacher-login-password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember-teacher" checked>
+                            <label for="remember-teacher">Remember my email</label>
+                        </div>
+                        <button class="btn btn-primary" onclick="handleLogin('teacher')">Login</button>
+                        <p class="auth-switch">New teacher? <a href="#" onclick="switchAuthForm('teacher','register')">Register</a></p>
+                    </div>
+
+                    <div id="teacher-register-form" class="auth-form">
+                        <h2>Teacher Registration</h2>
+                        <div class="form-group">
+                            <label for="teacher-register-name">Full Name</label>
+                            <input type="text" id="teacher-register-name" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher-register-email">Teacher Email</label>
+                            <input type="email" id="teacher-register-email" placeholder="ex : teacher@iiuc.bd" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher-register-password">Password</label>
+                            <input type="password" id="teacher-register-password" placeholder="Create a password (min. 6 characters)" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher-access-code">Access Code</label>
+                            <input type="password" id="teacher-access-code" placeholder="Enter teacher access code" required>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember-teacher-register" checked>
+                            <label for="remember-teacher-register">Save my email</label>
+                        </div>
+                        <button class="btn btn-primary" onclick="handleRegister('teacher')">Register</button>
+                        <p class="auth-switch">Already have an account? <a href="#" onclick="switchAuthForm('teacher','login')">Login</a></p>
+                    </div>
+                </div>
+
+                <div id="auth-message" class="message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student App Screen -->
+    <div id="student-app-screen" class="screen app-screen">
+        <header class="app-header">
+            <div class="header-content">
+                <div>
+                    <h1>Campus Voice - Student Portal</h1>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.25rem;">IIUC Student Management System</p>
+                </div>
+                <div class="user-info">
+                    <span id="student-user-name"></span>
+                    <button class="btn btn-secondary" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <nav class="app-nav">
+            <button class="nav-btn active" onclick="showSection('notices')">Notices</button>
+            <button class="nav-btn" onclick="showSection('attendance')">Attendance</button>
+            <button class="nav-btn" onclick="showSection('courses')">My Courses</button>
+            <button class="nav-btn" onclick="showSection('report')">Report Problem</button>
+        </nav>
+
+        <main class="app-main">
+            <!-- Notices Section -->
+            <section id="notices-section" class="content-section active">
+                <div class="section-header">
+                    <h2>Notices</h2>
+                    <button class="btn btn-primary" onclick="refreshNotices()">Refresh</button>
+                </div>
+                <div id="notices-list" class="notices-list">
+                    <div class="loading">Loading notices...</div>
+                </div>
+            </section>
+
+            <!-- Attendance Section -->
+            <section id="attendance-section" class="content-section">
+                <div class="section-header">
+                    <h2>My Attendance</h2>
+                    <button class="btn btn-primary" onclick="refreshAttendance()">Refresh</button>
+                </div>
+                <div id="attendance-stats" class="attendance-stats">
+                    <div class="stat-card">
+                        <h3>Total Classes</h3>
+                        <p id="total-classes">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Present</h3>
+                        <p id="present-count">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Absent</h3>
+                        <p id="absent-count">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Attendance %</h3>
+                        <p id="attendance-percentage">0%</p>
+                    </div>
+                </div>
+                <div id="attendance-list" class="attendance-list">
+                    <div class="loading">Loading attendance...</div>
+                </div>
+            </section>
+
+            <!-- Courses Section -->
+            <section id="courses-section" class="content-section">
+                <div class="section-header">
+                    <h2>My Assigned Courses</h2>
+                    <button class="btn btn-primary" onclick="location.reload()">Refresh</button>
+                </div>
+                <div id="courses-list" class="courses-list">
+                    <div class="loading">Loading courses...</div>
+                </div>
+            </section>
+
+            <!-- Report Problem Section -->
+            <section id="report-section" class="content-section">
+                <div class="section-header">
+                    <h2>Report a Problem</h2>
+                </div>
+                <div class="report-form-container">
+                    <form id="report-form" class="report-form">
+                        <div class="form-group">
+                            <label for="problem-title">Problem Title</label>
+                            <input type="text" id="problem-title" placeholder="Brief description of the problem" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="problem-category">Category</label>
+                            <select id="problem-category" required>
+                                <option value="">Select a category</option>
+                                <option value="academic">Academic</option>
+                                <option value="infrastructure">Infrastructure</option>
+                                <option value="administrative">Administrative</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="problem-description">Description</label>
+                            <textarea id="problem-description" rows="5" placeholder="Describe your problem in detail..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Report</button>
+                    </form>
+                </div>
+                <div id="report-message" class="message"></div>
+                <div class="section-header" style="margin-top: 2rem;">
+                    <h2>My Reports</h2>
+                </div>
+                <div id="reports-list" class="reports-list">
+                    <div class="loading">Loading your reports...</div>
+                </div>
+            </section>
+        </main>
+        <footer class="app-footer">
+            <div class="app-footer-content">
+                <div class="footer-links">
+                    <a href="#" onclick="alert('Terms of Service: This portal is for authorized IIUC students and staff only. Unauthorized access is prohibited.')">Terms of Service</a>
+                    <a href="#" onclick="alert('Privacy Policy: Your data is securely stored and used only for IIUC academic and administrative purposes.')">Privacy Policy</a>
+                    <a href="#" onclick="alert('Contact: support@iiuc.bd | For assistance, please contact the IT department.')">Contact Support</a>
+                </div>
+                <div class="university-info">
+                    <div class="university-name">International Islamic University Chittagong (IIUC)</div>
+                    <div>Kumira, Chittagong, Bangladesh</div>
+                    <div>© 2024 IIUC. All rights reserved.</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Admin App Screen -->
+    <div id="admin-app-screen" class="screen app-screen">
+        <header class="app-header admin">
+            <div class="header-content">
+                <div>
+                    <h1>Campus Voice - Admin Portal</h1>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.25rem;">IIUC Admin Management System</p>
+                </div>
+                <div class="user-info">
+                    <span id="admin-user-name"></span>
+                    <button class="btn btn-secondary" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <nav class="app-nav admin-nav">
+            <button class="nav-btn active" onclick="showAdminSection('admin-notices')">Manage Notices</button>
+            <button class="nav-btn" onclick="showAdminSection('admin-reports')">Review Reports</button>
+        </nav>
+
+        <main class="app-main">
+            <section id="admin-notices-section" class="content-section active">
+                <div class="section-header">
+                    <h2>Manage Notices</h2>
+                </div>
+                <div class="admin-form-container">
+                    <form id="admin-notice-form" class="report-form">
+                        <div class="form-group">
+                            <label for="notice-title">Notice Title</label>
+                            <input type="text" id="notice-title" placeholder="Enter notice title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="notice-content">Notice Content</label>
+                            <textarea id="notice-content" rows="4" placeholder="Enter notice details" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="notice-attachment">Attachment (Image or Document) - Optional</label>
+                            <input type="file" id="notice-attachment" accept="image/*,.pdf,.doc,.docx" style="padding: 0.5rem;">
+                            <small style="color: var(--text-light); font-size: 0.85rem; display: block; margin-top: 0.25rem;">You can upload images (JPG, PNG) or documents (PDF, DOC, DOCX)</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Publish Notice</button>
+                    </form>
+                    <div id="admin-notice-message" class="message"></div>
+                </div>
+                <div class="section-header" style="margin-top: 1.5rem;">
+                    <h2>Recent Notices</h2>
+                </div>
+                <div id="admin-notices-list" class="notices-list">
+                    <div class="loading">Loading notices...</div>
+                </div>
+            </section>
+
+            <section id="admin-reports-section" class="content-section">
+                <div class="section-header">
+                    <h2>Student Reports</h2>
+                </div>
+                <div id="admin-report-message" class="message"></div>
+                <div id="admin-reports-list" class="reports-list">
+                    <div class="loading">Loading reports...</div>
+                </div>
+            </section>
+        </main>
+        <footer class="app-footer">
+            <div class="app-footer-content">
+                <div class="footer-links">
+                    <a href="#" onclick="alert('Terms of Service: This portal is for authorized IIUC students and staff only. Unauthorized access is prohibited.')">Terms of Service</a>
+                    <a href="#" onclick="alert('Privacy Policy: Your data is securely stored and used only for IIUC academic and administrative purposes.')">Privacy Policy</a>
+                    <a href="#" onclick="alert('Contact: support@iiuc.bd | For assistance, please contact the IT department.')">Contact Support</a>
+                </div>
+                <div class="university-info">
+                    <div class="university-name">International Islamic University Chittagong (IIUC)</div>
+                    <div>Kumira, Chittagong, Bangladesh</div>
+                    <div>© 2024 IIUC. All rights reserved.</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Teacher App Screen -->
+    <div id="teacher-app-screen" class="screen app-screen">
+        <header class="app-header teacher">
+            <div class="header-content">
+                <div>
+                    <h1>Campus Voice - Teacher Portal</h1>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.25rem;">IIUC Teacher Management System</p>
+                </div>
+                <div class="user-info">
+                    <span id="teacher-user-name"></span>
+                    <button class="btn btn-secondary" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <nav class="app-nav teacher-nav">
+            <button class="nav-btn active" onclick="showTeacherSection('mark-attendance')">Mark Attendance</button>
+            <button class="nav-btn" onclick="showTeacherSection('teacher-subjects')">My Subjects</button>
+        </nav>
+
+        <main class="app-main">
+            <section id="mark-attendance-section" class="content-section active">
+                <div class="section-header">
+                    <h2>Mark Student Attendance</h2>
+                </div>
+                <div id="teacher-message" class="message"></div>
+                <div id="students-list" class="students-list">
+                    <div class="loading">Loading students...</div>
+                </div>
+            </section>
+
+            <section id="teacher-subjects-section" class="content-section">
+                <div class="section-header">
+                    <h2>My Subjects</h2>
+                </div>
+                <div class="empty-state">
+                    <p>Subject management coming soon</p>
+                </div>
+            </section>
+        </main>
+        <footer class="app-footer">
+            <div class="app-footer-content">
+                <div class="footer-links">
+                    <a href="#" onclick="alert('Terms of Service: This portal is for authorized IIUC students and staff only.')">Terms of Service</a>
+                    <a href="#" onclick="alert('Privacy Policy: Your data is securely stored.')">Privacy Policy</a>
+                    <a href="#" onclick="alert('Contact: support@iiuc.bd')">Contact Support</a>
+                </div>
+                <div class="university-info">
+                    <div class="university-name">International Islamic University Chittagong (IIUC)</div>
+                    <div>Kumira, Chittagong, Bangladesh</div>
+                    <div>© 2024 IIUC. All rights reserved.</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
